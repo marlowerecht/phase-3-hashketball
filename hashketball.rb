@@ -1,4 +1,6 @@
 # Write your code below game_hash
+require 'pry'
+
 def game_hash
   {
     home: {
@@ -126,4 +128,87 @@ def game_hash
   }
 end
 
-# Write code here
+def all_players
+  game_hash[:home][:players] + game_hash[:away][:players]
+end
+
+def get_player_by_name player_name
+  all_players.find do |player|
+    player[:player_name] == player_name
+  end
+end
+
+def get_team_by_name team_name
+  #return team
+  game_hash.find do |key, value|
+    value[:team_name] == team_name
+  end
+  team_info[1]
+end
+
+def num_points_scored player
+  all_players.find do |person|
+    if person[:player_name] == player
+      return person[:points]
+    end
+  end
+end
+
+def shoe_size player
+  all_players.find do |person|
+    if person[:player_name] == player
+      return person[:shoe]
+    end
+  end
+end
+
+def team_colors team
+  if game_hash[:home][:team_name] == team
+    game_hash[:home][:colors]
+  elsif game_hash[:away][:team_name] == team
+    game_hash[:away][:colors]
+  end
+end
+
+def team_names
+  team_name_array = []
+  team_name_array << game_hash[:home][:team_name]
+  team_name_array << game_hash[:away][:team_name]
+end
+
+def player_numbers team
+  player_number_array = []
+  if team == game_hash[:home][:team_name]
+    game_hash[:home][:players].map do |person|
+      player_number_array << person[:number]
+    end
+    player_number_array
+  elsif team == game_hash[:away][:team_name]
+    game_hash[:away][:players].map do |person|
+      player_number_array << person[:number]
+    end
+    player_number_array
+  end
+end
+
+def player_stats player_name
+  all_players.find do |player|
+    if player[:player_name] == player_name
+      return player
+    end
+  end
+end
+
+def big_shoe_rebounds
+  sorted_by_shoe_size = all_players.sort do |player1, player2|
+    if player1[:shoe] == player2[:shoe]
+      0
+    elsif player1[:shoe] < player2[:shoe]
+      -1
+    elsif player1[:shoe] > player2[:shoe]
+      1
+    end
+  end
+  biggest_shoe_size_player = sorted_by_shoe_size[-1]
+  biggest_shoe_size_player[:rebounds]
+end
